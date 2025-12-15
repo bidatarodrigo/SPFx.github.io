@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Calendário interativo para SharePoint">
-    <title>Calendário SharePoint</title>
+    <title>Calendário</title>
     <style>
+        /* RESET E CONFIGURAÇÕES GERAIS */
         * {
             margin: 0;
             padding: 0;
@@ -13,21 +13,18 @@
         }
         
         body {
+            background: #0D6E6E; /* FUNDO BRANCO - sem cinza */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f5f5f5;
+            overflow: hidden; /* SEM BARRAS DE ROLAGEM */
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
         
-        .calendar-container {
-            width: 100%;
-            max-width: 320px;
-        }
-        
+        /* CARD DO CALENDÁRIO */
         .calendar-card {
+            width: 320px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 24px rgba(0,0,0,0.1);
@@ -35,8 +32,9 @@
             border: 1px solid #e5e6ea;
         }
         
+        /* CABEÇALHO AZUL */
         .calendar-header {
-            background: #8bd1ff;
+            background: #22d6d6;
             color: white;
             text-align: center;
             padding: 18px 14px 24px;
@@ -56,16 +54,18 @@
             margin-top: 8px;
         }
         
+        /* CORPO DO CALENDÁRIO */
         .calendar-body {
             padding: 12px 14px 16px;
         }
         
+        /* NAVEGAÇÃO DO MÊS */
         .month-nav {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
         
         .month-name {
@@ -73,27 +73,30 @@
             font-size: 1.1rem;
             min-width: 150px;
             text-align: center;
+            color: #1f1f1f;
         }
         
         .nav-btn {
             border: 1px solid #e5e6ea;
             background: #f0f2f5;
             border-radius: 10px;
-            padding: 6px 9px;
+            padding: 6px 12px;
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.2s;
+            color: #1f1f1f;
         }
         
         .nav-btn:hover {
             background: #e4e6e9;
         }
         
+        /* DIAS DA SEMANA */
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         .weekday-cell {
@@ -102,8 +105,10 @@
             color: #7a7a7a;
             text-transform: uppercase;
             padding: 4px 0;
+            font-weight: 500;
         }
         
+        /* GRADE DE DIAS */
         .days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -112,52 +117,64 @@
         
         .day-cell {
             text-align: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-radius: 10px;
             font-weight: 600;
-            cursor: pointer;
+            font-size: 0.95rem;
+            color: #1f1f1f;
             transition: all 0.2s;
             border: 2px solid transparent;
+            background: transparent;
         }
         
         .day-cell:hover {
-            background: #f0f2f5;
+            background: #f5f5f5;
         }
         
+        /* DIA ATUAL (DESTAQUE) */
         .day-cell.today {
             background: rgba(0, 120, 212, 0.12);
             border-color: #0078D4;
             color: #0078D4;
         }
         
+        /* DIA SELECIONADO */
         .day-cell.selected {
-            background: #0078D4;
+            background: #0D6E6E;
             color: white;
         }
         
+        /* DIAS DE OUTROS MESES */
         .day-cell.other-month {
             color: #a0a0a0;
             font-weight: 400;
         }
         
+        /* BOTÃO "HOJE" */
         .today-btn {
-            background: #0078D4;
+            background: #0D6E6E;
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 8px 16px;
+            padding: 10px 0;
             cursor: pointer;
             font-size: 0.9rem;
-            margin-top: 12px;
+            margin-top: 16px;
             width: 100%;
             transition: background 0.2s;
+            font-weight: 600;
         }
         
         .today-btn:hover {
-            background: #106ebe;
+            background: #0D6E6E;
         }
         
+        /* RESPONSIVIDADE */
         @media (max-width: 360px) {
+            .calendar-card {
+                width: 300px;
+            }
+            
             .day-big {
                 font-size: 3.6rem;
             }
@@ -169,57 +186,58 @@
     </style>
 </head>
 <body>
-    <div class="calendar-container">
-        <div class="calendar-card">
-            <!-- Cabeçalho -->
-            <div class="calendar-header">
-                <div class="weekday" id="weekdayLabel">SEGUNDA-FEIRA</div>
-                <div class="day-big" id="dayBig">17</div>
+    <!-- CARD DO CALENDÁRIO -->
+    <div class="calendar-card">
+        <!-- CABEÇALHO COM DIA DA SEMANA E DATA -->
+        <div class="calendar-header">
+            <div class="weekday" id="weekdayLabel">SEXTA-FEIRA</div>
+            <div class="day-big" id="dayBig">12</div>
+        </div>
+        
+        <!-- CORPO DO CALENDÁRIO -->
+        <div class="calendar-body">
+            <!-- NAVEGAÇÃO DO MÊS -->
+            <div class="month-nav">
+                <button class="nav-btn" id="prevMonth">‹</button>
+                <div class="month-name" id="monthLabel">Dezembro 2025</div>
+                <button class="nav-btn" id="nextMonth">›</button>
             </div>
             
-            <!-- Corpo -->
-            <div class="calendar-body">
-                <div class="month-nav">
-                    <button class="nav-btn" id="prevMonth">‹</button>
-                    <div class="month-name" id="monthLabel">Março 2025</div>
-                    <button class="nav-btn" id="nextMonth">›</button>
-                </div>
-                
-                <!-- Dias da semana -->
-                <div class="weekdays">
-                    <div class="weekday-cell">D</div>
-                    <div class="weekday-cell">S</div>
-                    <div class="weekday-cell">T</div>
-                    <div class="weekday-cell">Q</div>
-                    <div class="weekday-cell">Q</div>
-                    <div class="weekday-cell">S</div>
-                    <div class="weekday-cell">S</div>
-                </div>
-                
-                <!-- Grade de dias -->
-                <div class="days-grid" id="daysGrid">
-                    <!-- JavaScript preencherá aqui -->
-                </div>
-                
-                <button class="today-btn" id="todayBtn">Hoje</button>
+            <!-- DIAS DA SEMANA -->
+            <div class="weekdays">
+                <div class="weekday-cell">D</div>
+                <div class="weekday-cell">S</div>
+                <div class="weekday-cell">T</div>
+                <div class="weekday-cell">Q</div>
+                <div class="weekday-cell">Q</div>
+                <div class="weekday-cell">S</div>
+                <div class="weekday-cell">S</div>
             </div>
+            
+            <!-- GRADE DE DIAS -->
+            <div class="days-grid" id="daysGrid">
+                <!-- JavaScript vai preencher aqui -->
+            </div>
+            
+            <!-- BOTÃO HOJE -->
+            <button class="today-btn" id="todayBtn">Hoje</button>
         </div>
     </div>
 
     <script>
-        // Configurações
+        // CONFIGURAÇÕES
         const config = {
             locale: 'pt-BR',
-            startOfWeek: 0 // 0 = Domingo, 1 = Segunda
+            startOfWeek: 0 // 0 = Domingo (como na sua imagem)
         };
         
-        // Estado
-        let currentDate = new Date();
-        let selectedDate = new Date();
-        let viewYear = currentDate.getFullYear();
-        let viewMonth = currentDate.getMonth();
+        // ESTADO
+        let currentDate = new Date(2025, 11, 12); // 12 de Dezembro de 2025
+        let selectedDate = new Date(2025, 11, 12);
+        let viewYear = 2025;
+        let viewMonth = 11; // Dezembro (0-11)
         
-        // Elementos DOM
+        // ELEMENTOS DOM
         const weekdayLabel = document.getElementById('weekdayLabel');
         const dayBig = document.getElementById('dayBig');
         const monthLabel = document.getElementById('monthLabel');
@@ -228,7 +246,7 @@
         const nextMonthBtn = document.getElementById('nextMonth');
         const todayBtn = document.getElementById('todayBtn');
         
-        // Arrays de tradução
+        // ARRAYS DE TRADUÇÃO
         const monthNames = [
             'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
             'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -239,10 +257,7 @@
             'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO'
         ];
         
-        // Dias da semana abreviados
-        const weekdayShort = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-        
-        // Funções auxiliares
+        // FUNÇÕES AUXILIARES
         function getDaysInMonth(year, month) {
             return new Date(year, month + 1, 0).getDate();
         }
@@ -262,7 +277,7 @@
             return isSameDay(date, today);
         }
         
-        // Renderizar calendário
+        // RENDERIZAR CALENDÁRIO
         function renderCalendar() {
             // Atualizar cabeçalho
             weekdayLabel.textContent = weekdayNames[selectedDate.getDay()];
@@ -276,10 +291,12 @@
             const daysInMonth = getDaysInMonth(viewYear, viewMonth);
             const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
             
-            // Dias do mês anterior
+            // Dias do mês anterior (mostrando os últimos dias do mês anterior)
             const prevMonthDays = getDaysInMonth(viewYear, viewMonth - 1);
-            for (let i = firstDay - config.startOfWeek; i > 0; i--) {
-                const day = prevMonthDays - i + 1;
+            const daysToShowFromPrevMonth = firstDay; // Quantos dias do mês anterior mostrar
+            
+            for (let i = daysToShowFromPrevMonth - 1; i >= 0; i--) {
+                const day = prevMonthDays - i;
                 createDayCell(day, true, false, false);
             }
             
@@ -291,10 +308,12 @@
                 createDayCell(day, false, isTodayCell, isSelected);
             }
             
-            // Dias do próximo mês (para completar a grade)
-            const totalCells = 42; // 6 semanas * 7 dias
-            const remainingCells = totalCells - (firstDay + daysInMonth - config.startOfWeek);
-            for (let day = 1; day <= remainingCells; day++) {
+            // Dias do próximo mês (para completar 6 linhas = 42 células)
+            const totalCells = 42; // 6 semanas × 7 dias
+            const cellsUsed = daysToShowFromPrevMonth + daysInMonth;
+            const daysFromNextMonth = totalCells - cellsUsed;
+            
+            for (let day = 1; day <= daysFromNextMonth; day++) {
                 createDayCell(day, true, false, false);
             }
         }
@@ -321,12 +340,15 @@
                     selectedDate = new Date(viewYear, viewMonth, day);
                     renderCalendar();
                 });
+                
+                // Efeito visual ao clicar
+                dayCell.style.cursor = 'pointer';
             }
             
             daysGrid.appendChild(dayCell);
         }
         
-        // Navegação
+        // NAVEGAÇÃO
         prevMonthBtn.addEventListener('click', () => {
             viewMonth--;
             if (viewMonth < 0) {
@@ -354,7 +376,7 @@
             renderCalendar();
         });
         
-        // Atalhos de teclado
+        // ATALHOS DE TECLADO
         document.addEventListener('keydown', (e) => {
             switch(e.key) {
                 case 'ArrowLeft':
@@ -370,7 +392,7 @@
             }
         });
         
-        // Inicializar
+        // INICIALIZAR COM A DATA DA IMAGEM (12/12/2025)
         renderCalendar();
     </script>
 </body>
