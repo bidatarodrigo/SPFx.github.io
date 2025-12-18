@@ -134,7 +134,7 @@
         /* DIA ATUAL (DESTAQUE) */
         .day-cell.today {
             background: rgba(0, 120, 212, 0.12);
-            border-color: #0078D4;
+            border-color: #ffffff;
             color: #0078D4;
         }
         
@@ -232,10 +232,11 @@
         };
         
         // ESTADO
-        let currentDate = new Date(2025, 11, 12); // 12 de Dezembro de 2025
-        let selectedDate = new Date(2025, 11, 12);
-        let viewYear = 2025;
-        let viewMonth = 11; // Dezembro (0-11)
+        const today = new Date();
+        let currentDate = today
+        let selectedDate = today;
+        let viewYear = today.getFullYear();
+        let viewMonth = today.getMonth();
         
         // ELEMENTOS DOM
         const weekdayLabel = document.getElementById('weekdayLabel');
